@@ -9,7 +9,10 @@ int main(int argc, char* argv[]){
 	uint64_t sum = 0;
 	long fSize = 0;
        	uint32_t fStrlen = 0;	
-	
+
+	uint32_t values[argc - 1] = {0,};
+	int count = 0;
+
 	for(int i = 1; i < argc; i++){
 		FILE* f = fopen(argv[i], "rb");
 		if(!f) continue;
@@ -26,8 +29,14 @@ int main(int argc, char* argv[]){
 
 		fread(&n, 4, 1, f);
 		sum += ntohl(n);
+		values[count++] = n; 
 		fclose(f);
 	}
-	printf("sum : %d", sum);
+
+	for(int i = 0; i < count; i++){
+		printf("%u(0x%04x)", ntohl(values[i]), ntohl(values[i]));
+		if (i < count - 1) printf(" + ");
+	}
+	printf(" = %llu(0x%04x)", sum, sum);
 	return sum;
 }
